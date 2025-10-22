@@ -1,5 +1,7 @@
 package com.example.tic_tac_toe;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,14 +17,26 @@ public class MainActivity extends AppCompatActivity {
     private final Button[][] buttons = new Button[3][3];
     private boolean isPlayerXTurn = true;
     private boolean isSinglePlayer = true;
+    private boolean isHardMode = false;
     private TextView statusTextView;
     private VictoryLineView victoryLineView;
     private final Random random = new Random();
+
+    public static final String EXTRA_SINGLE_PLAYER = "com.example.tic_tac_toe.SINGLE_PLAYER";
+    public static final String EXTRA_HARD_MODE = "com.example.tic_tac_toe.HARD_MODE";
+
+    public static Intent createIntent(Context context, boolean singlePlayer, boolean hardMode) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(EXTRA_SINGLE_PLAYER, singlePlayer);
+        intent.putExtra(EXTRA_HARD_MODE, hardMode);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        parseModeFromIntent();
         initBoard();
         statusTextView = findViewById(R.id.statusTextView);
         victoryLineView = findViewById(R.id.victoryLineView);
@@ -45,6 +59,19 @@ public class MainActivity extends AppCompatActivity {
                     button.setOnClickListener(v -> handleMove(row, col));
                 }
             }
+        }
+    }
+
+    private void parseModeFromIntent() {
+        Intent intent = getIntent();
+        if (intent == null) {
+            return;
+        }
+        if (intent.hasExtra(EXTRA_SINGLE_PLAYER)) {
+            isSinglePlayer = intent.getBooleanExtra(EXTRA_SINGLE_PLAYER, true);
+        }
+        if (intent.hasExtra(EXTRA_HARD_MODE)) {
+            isHardMode = intent.getBooleanExtra(EXTRA_HARD_MODE, false);
         }
     }
 

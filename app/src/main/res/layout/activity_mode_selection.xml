@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context=".ModeSelectionActivity">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="井字棋"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnPlayerVsPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="玩家对战"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnPlayerVsComputerEasy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="人机对战(easy)"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnPlayerVsComputerHard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="人机对战(hard)" />
+
+</LinearLayout>
