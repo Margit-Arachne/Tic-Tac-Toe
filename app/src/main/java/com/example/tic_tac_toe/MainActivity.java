@@ -7,13 +7,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     private final int[][] board = new int[3][3];
     private final Button[][] buttons = new Button[3][3];
     private boolean isPlayerXTurn = true;
+    private boolean isSinglePlayer = true;
     private TextView statusTextView;
     private VictoryLineView victoryLineView;
+    private final Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         }
         isPlayerXTurn = !isPlayerXTurn;
         updateStatusText();
+        maybePerformComputerMove();
     }
 
     private void resetBoard() {
@@ -153,6 +158,35 @@ public class MainActivity extends AppCompatActivity {
     private void updateStatusText() {
         if (statusTextView != null) {
             statusTextView.setText(isPlayerXTurn ? "轮到玩家 X" : "轮到玩家 O");
+        }
+    }
+
+    private void maybePerformComputerMove() {
+        if (!isSinglePlayer || isPlayerXTurn) {
+            return;
+        }
+        int[][] emptyCells = new int[9][2];
+        int count = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == 0) {
+                    emptyCells[count][0] = i;
+                    emptyCells[count][1] = j;
+                    count++;
+                }
+            }
+        }
+        if (count == 0) {
+            return;
+        }
+        int choice = random.nextInt(count);
+        int row = emptyCells[choice][0];
+        int col = emptyCells[choice][1];
+        Button button = buttons[row][col];
+        if (button != null) {
+            button.postDelayed(() -> handleMove(row, col), 250);
+        } else {
+            handleMove(row, col);
         }
     }
 }
