@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView statusTextView;
     private VictoryLineView victoryLineView;
     private final Random random = new Random();
+    private final HardAiActivity hardAi = new HardAiActivity();
 
     public static final String EXTRA_SINGLE_PLAYER = "com.example.tic_tac_toe.SINGLE_PLAYER";
     public static final String EXTRA_HARD_MODE = "com.example.tic_tac_toe.HARD_MODE";
@@ -192,6 +193,34 @@ public class MainActivity extends AppCompatActivity {
         if (!isSinglePlayer || isPlayerXTurn) {
             return;
         }
+        int[] target;
+        if (isHardMode) {
+            int aiPlayer = isPlayerXTurn ? 1 : 2;
+            HardAiActivity.Move move = hardAi.findBestMove(board, aiPlayer);
+            if (move != null) {
+                target = new int[]{move.row, move.col};
+            } else {
+                target = pickRandomEmptyCell();
+            }
+        } else {
+            target = pickRandomEmptyCell();
+        }
+
+        if (target == null) {
+            return;
+        }
+
+        int row = target[0];
+        int col = target[1];
+        Button button = buttons[row][col];
+        if (button != null) {
+            button.postDelayed(() -> handleMove(row, col), 250);
+        } else {
+            handleMove(row, col);
+        }
+    }
+
+    private int[] pickRandomEmptyCell() {
         int[][] emptyCells = new int[9][2];
         int count = 0;
         for (int i = 0; i < 3; i++) {
@@ -204,16 +233,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (count == 0) {
-            return;
+            return null;
         }
         int choice = random.nextInt(count);
-        int row = emptyCells[choice][0];
-        int col = emptyCells[choice][1];
-        Button button = buttons[row][col];
-        if (button != null) {
-            button.postDelayed(() -> handleMove(row, col), 250);
-        } else {
-            handleMove(row, col);
-        }
+        return new int[]{emptyCells[choice][0], emptyCells[choice][1]};
     }
+
 }
